@@ -61,7 +61,7 @@ sns.boxplot(data=train, y='count',x='weather',ax=axes[0,0])
 sns.boxplot(data=train, y='count',x='season',ax=axes[0,1])
 sns.boxplot(data=train, y='count',x='Weekday',ax=axes[1,0])
 sns.boxplot(data=train, y='count',x='Month',ax=axes[1,1])
-plt.savefig('Boxplot.png',dpi=900)
+#plt.savefig('Boxplot.png',dpi=900)
 plt.show()
 Month_grouped = train[['count','Month']].groupby('Month',as_index=False).mean()
 Hour_season_grouped = (train.groupby(["Hour","season"],as_index=False)["count"].mean())
@@ -75,12 +75,12 @@ sns.pointplot( y = Hour_season_grouped['count'], x = Hour_season_grouped['Hour']
 sns.pointplot( y = Hour_Weekday_grouped['count'], x = Hour_Weekday_grouped['Hour'],  hue=Hour_Weekday_grouped['Weekday'], join=True,ax=axes[2])
 sns.pointplot( y = Hour_Month_grouped['count'], x = Hour_Month_grouped['Hour'],  hue=Hour_Month_grouped['Month'], join=True,ax=axes[3])
 sns.pointplot( y = Hour_weather_grouped['count'], x = Hour_weather_grouped['Hour'],  hue=Hour_weather_grouped['weather'], join=True,ax=axes[4])
-plt.savefig('barplot-pointplot.png',dpi=900)
+#plt.savefig('barplot-pointplot.png',dpi=900)
 plt.show()
 
 plt.figure()
 sns.heatmap(data=train.corr(), linewidths=2)
-plt.savefig('heatmap.png',dpi=900)
+#plt.savefig('heatmap.png',dpi=900)
 plt.show()
 
 """ Removing Outliers """
@@ -106,11 +106,6 @@ CV_gbreg.fit(X=X_train,y=np.log1p(y_train))
 print("Best Paramters for Gradient boosted regression: ",CV_gbreg.best_params_)
 preds = CV_gbreg.predict(X=X_test)
 print ("RMSLE Value for Gradient Boosted Regression: ",  rmsle( np.exp([max(x,0) for x in preds]) ,y_test,False))
-predictions = CV_gbreg.predict(test)
-for i in range(len(predictions)):
-    if predictions[i]<=0:
-        predictions[i]=0
-pd.DataFrame({'Datetime': datetimecol, 'count': predictions}).to_csv("bike_gbr.csv", index=False)
 
 
 # Lasso Regression
@@ -123,11 +118,7 @@ grid_lasso.fit(X=X_train,y=np.log1p(y_train))
 preds = grid_lasso.predict(X=X_test)
 print ("Best Paramters for Lasso Regression: ",grid_lasso.best_params_)
 print ("RMSLE Value for Lasso regression: ",  rmsle( np.exp([max(x,0) for x in preds]) ,y_test,False))
-predictions = grid_lasso.predict(test)
-for i in range(len(predictions)):
-    if predictions[i]<=0:
-        predictions[i]=0
-pd.DataFrame({'Datetime': datetimecol, 'count': predictions}).to_csv("bike_lasso.csv", index=False)
+
 
 
 # Random Forest Regression
@@ -139,11 +130,7 @@ grid_random_forest.fit(X=X_train, y= np.log1p(y_train))
 preds = grid_random_forest.predict(X=X_test)
 print("Best Paramters for Random Forest Regression: ", grid_random_forest.best_params_)
 print("RMSLE Value for Random forest regression: ",  rmsle( np.exp([max(x,0) for x in preds]) ,y_test,False))
-predictions = grid_random_forest.predict(test)
-for i in range(len(predictions)):
-    if predictions[i]<=0:
-        predictions[i]=0
-pd.DataFrame({'Datetime': datetimecol, 'count': predictions}).to_csv("bike_rfreg.csv", index=False)
+
 
 
 # Ridge Regression
@@ -155,11 +142,6 @@ grid_ridge.fit(X_train, np.log1p(y_train))
 preds = grid_ridge.predict(X=X_test)
 print ("Best Paramters for Ridge Regression: ",grid_ridge.best_params_)
 print ("RMSLE Value For Ridge Regression: ",rmsle( np.exp([max(x,0) for x in preds]) ,y_test,False))
-predictions = grid_ridge.predict(test)
-for i in range(len(predictions)):
-    if predictions[i]<=0:
-        predictions[i]=0
-pd.DataFrame({'Datetime': datetimecol, 'count': predictions}).to_csv("bike_ridge.csv", index=False)
 
 
 # Linear Regression
@@ -168,11 +150,7 @@ linreg = LinearRegression()
 linreg.fit(X=X_train, y=np.log1p(y_train))
 y_pred = linreg.predict(X=X_test)
 print ("RMSLE Value for linear regression: ",  rmsle( np.exp([max(x,0) for x in preds]) ,y_test,False))
-predictions = linreg.predict(test)
-for i in range(len(predictions)):
-    if predictions[i]<=0:
-        predictions[i]=0
-pd.DataFrame({'Datetime': datetimecol, 'count': predictions}).to_csv("bike_linreg.csv", index=False)
+
 
 
 stop = timeit.default_timer()
